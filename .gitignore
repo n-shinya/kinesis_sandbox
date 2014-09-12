@@ -1,3 +1,6 @@
 env.sh
 vendor
 .bundle
+.idea
+*.iml
+target
