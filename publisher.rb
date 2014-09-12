@@ -12,9 +12,9 @@ TwitterStreamingClient.new.request(filtering_words) do |res|
   data = {
     :id => res.id,
     :text => res.text,
-    :friends_count => res.user.friends_count,
-    :followers_count => res.user.followers_count,
-    :created_at => res.created_at
+    :friendsCount => res.user.friends_count,
+    :followersCount => res.user.followers_count,
+    :createdAt => res.created_at
   }.to_json
   kinesis_client.put_record(res.id.to_s, data)
 end
