@@ -18,6 +18,7 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.arnx.jsonic.JSONHint;
 
 /**
  * 
@@ -35,8 +36,8 @@ public class KinesisMessageModel implements Serializable {
     protected String id;
     protected String createdAt;
     protected String text;
-    protected String friendsCount;
-    protected String followersCount;
+    protected Integer friendsCount;
+    protected Integer followersCount;
 
     public String getId() {
         return id;
@@ -62,19 +63,19 @@ public class KinesisMessageModel implements Serializable {
         this.text = text;
     }
 
-    public String getFriendsCount() {
+    public Integer getFriendsCount() {
         return friendsCount;
     }
 
-    public void setFriendsCount(String friendsCount) {
+    public void setFriendsCount(Integer friendsCount) {
         this.friendsCount = friendsCount;
     }
 
-    public String getFollowersCount() {
+    public Integer getFollowersCount() {
         return followersCount;
     }
 
-    public void setFollowersCount(String followersCount) {
+    public void setFollowersCount(Integer followersCount) {
         this.followersCount = followersCount;
     }
 

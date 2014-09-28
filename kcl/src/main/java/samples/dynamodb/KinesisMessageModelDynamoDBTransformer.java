@@ -14,9 +14,15 @@
  */
 package samples.dynamodb;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.amazonaws.services.kinesis.model.Record;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import net.arnx.jsonic.JSON;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import samples.KinesisMessageModel;
 
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
@@ -31,6 +37,8 @@ public class KinesisMessageModelDynamoDBTransformer extends
         BasicJsonTransformer<KinesisMessageModel, Map<String, AttributeValue>> implements
         DynamoDBTransformer<KinesisMessageModel> {
 
+    private static final Log LOG = LogFactory.getLog(KinesisMessageModelDynamoDBTransformer.class);
+
     /**
      * Creates a new KinesisMessageModelDynamoDBTransformer.
      */
@@ -39,12 +47,33 @@ public class KinesisMessageModelDynamoDBTransformer extends
     }
 
     @Override
+    public KinesisMessageModel toClass(Record record) throws IOException {
+        try {
+            String json = new String(record.getData().array(), "UTF-8");
+            Map<String, Object> tweet = JSON.decode(json);
+            Map<String, Object> user = (Map)tweet.get("user");
+            KinesisMessageModel model = new KinesisMessageModel();
+            model.setId(tweet.get("id").toString());
+            model.setCreatedAt(tweet.get("created_at").toString());
+            model.setText(tweet.get("text").toString());
+            model.setFollowersCount(Integer.valueOf(user.get("followers_count").toString()));
+            model.setFriendsCount(Integer.valueOf(user.get("friends_count").toString()));
+            System.out.println(model);
+            return model;
+        } catch (Exception e) {
+            String message = "Error parsing record from JSON: " + new String(record.getData().array());
+            LOG.error(message, e);
+            throw new IOException(message, e);
+        }
+    }
+
+    @Override
     public Map<String, AttributeValue> fromClass(KinesisMessageModel message) {
         Map<String, AttributeValue> item = new HashMap<String, AttributeValue>();
         putStringIfNonempty(item, "id", message.getId());
         putStringIfNonempty(item, "text", message.getText());
-        putStringIfNonempty(item, "friends_count", message.getFriendsCount());
-        putStringIfNonempty(item, "followers_count", message.getFollowersCount());
+        putIntegerIfNonempty(item, "friends_count", message.getFriendsCount());
+        putIntegerIfNonempty(item, "followers_count", message.getFollowersCount());
         putStringIfNonempty(item, "created_at", message.getCreatedAt());
         return item;
     }
@@ -82,5 +111,9 @@ public class KinesisMessageModelDynamoDBTransformer extends
      */
     private void putIntegerIfNonempty(Map<String, AttributeValue> item, String key, Integer value) {
         putStringIfNonempty(item, key, Integer.toString(value));
+    }
+
+    protected KinesisMessageModel toModel() {
+        return null;
     }
 }
