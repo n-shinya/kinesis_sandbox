@@ -12,7 +12,7 @@ class TwitterStreamingClient
   end
 
   def request(filtering_words)
-    @client.filter(:track => filtering_words) do |obj|
+    @client.filter(:track => filtering_words, :language => 'ja') do |obj|
       if obj.is_a?(Twitter::Tweet)
         yield obj
       end
