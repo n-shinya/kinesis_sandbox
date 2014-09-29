@@ -39,7 +39,7 @@ public class SingleKinesisMessageModelElasticsearchTransformer extends KinesisMe
     @Override
     public KinesisMessageModel toClass(Record record) throws IOException {
         try {
-            return new ObjectMapper().readValue(record.getData().array(), KinesisMessageModel.class);
+            return KinesisMessageModel.newInstance(new String(record.getData().array(), "UTF-8"));
         } catch (IOException e) {
             String message = "Error parsing record from JSON: " + new String(record.getData().array());
             LOG.error(message, e);

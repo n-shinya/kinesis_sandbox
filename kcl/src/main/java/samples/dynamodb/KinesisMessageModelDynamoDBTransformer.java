@@ -49,17 +49,7 @@ public class KinesisMessageModelDynamoDBTransformer extends
     @Override
     public KinesisMessageModel toClass(Record record) throws IOException {
         try {
-            String json = new String(record.getData().array(), "UTF-8");
-            Map<String, Object> tweet = JSON.decode(json);
-            Map<String, Object> user = (Map)tweet.get("user");
-            KinesisMessageModel model = new KinesisMessageModel();
-            model.setId(tweet.get("id").toString());
-            model.setCreatedAt(tweet.get("created_at").toString());
-            model.setText(tweet.get("text").toString());
-            model.setFollowersCount(Integer.valueOf(user.get("followers_count").toString()));
-            model.setFriendsCount(Integer.valueOf(user.get("friends_count").toString()));
-            System.out.println(model);
-            return model;
+            return KinesisMessageModel.newInstance(new String(record.getData().array(), "UTF-8"));
         } catch (Exception e) {
             String message = "Error parsing record from JSON: " + new String(record.getData().array());
             LOG.error(message, e);
@@ -74,6 +64,10 @@ public class KinesisMessageModelDynamoDBTransformer extends
         putStringIfNonempty(item, "text", message.getText());
         putIntegerIfNonempty(item, "friends_count", message.getFriendsCount());
         putIntegerIfNonempty(item, "followers_count", message.getFollowersCount());
+        putIntegerIfNonempty(item, "favorite_count", message.getFavoriteCount());
+        putIntegerIfNonempty(item, "retweet_count", message.getRetweetCount());
+        putStringIfNonempty(item, "source", message.getSource());
+        putStringIfNonempty(item, "name", message.getName());
         putStringIfNonempty(item, "created_at", message.getCreatedAt());
         return item;
     }
@@ -113,7 +107,4 @@ public class KinesisMessageModelDynamoDBTransformer extends
         putStringIfNonempty(item, key, Integer.toString(value));
     }
 
-    protected KinesisMessageModel toModel() {
-        return null;
-    }
 }

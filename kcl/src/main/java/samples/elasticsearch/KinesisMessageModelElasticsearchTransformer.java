@@ -35,7 +35,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public abstract class KinesisMessageModelElasticsearchTransformer extends ElasticsearchTransformer<KinesisMessageModel> {
     private static final Log LOG = LogFactory.getLog(KinesisMessageModelElasticsearchTransformer.class);
 
-    private static final String INDEX_NAME = "kinesis-example";
+    private static final String INDEX_NAME = "tweet";
 
     @Override
     public ElasticsearchObject fromClass(KinesisMessageModel record) throws IOException {

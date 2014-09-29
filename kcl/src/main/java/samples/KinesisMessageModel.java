@@ -15,9 +15,11 @@
 package samples;
 
 import java.io.Serializable;
+import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.arnx.jsonic.JSON;
 import net.arnx.jsonic.JSONHint;
 
 /**
@@ -38,6 +40,10 @@ public class KinesisMessageModel implements Serializable {
     protected String text;
     protected Integer friendsCount;
     protected Integer followersCount;
+    protected Integer favoriteCount;
+    protected Integer retweetCount;
+    protected String source;
+    protected String name;
 
     public String getId() {
         return id;
@@ -77,6 +83,56 @@ public class KinesisMessageModel implements Serializable {
 
     public void setFollowersCount(Integer followersCount) {
         this.followersCount = followersCount;
+    }
+
+    public Integer getFavoriteCount() {
+        return favoriteCount;
+    }
+
+    public void setFavoriteCount(Integer favoriteCount) {
+        this.favoriteCount = favoriteCount;
+    }
+    public Integer getRetweetCount() {
+        return retweetCount;
+    }
+
+    public void setRetweetCount(Integer retweetCount) {
+        this.retweetCount = retweetCount;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public static KinesisMessageModel newInstance(String json) {
+        KinesisMessageModel model = new KinesisMessageModel();
+
+        Map<String, Object> tweet = JSON.decode(json);
+        model.setId(tweet.get("id").toString());
+        model.setCreatedAt(tweet.get("created_at").toString());
+        model.setText(tweet.get("text").toString());
+        model.setFavoriteCount(Integer.valueOf(tweet.get("favorite_count").toString()));
+        model.setRetweetCount(Integer.valueOf(tweet.get("retweet_count").toString()));
+        model.setSource(tweet.get("source").toString());
+
+        Map<String, Object> user = (Map)tweet.get("user");
+        model.setFollowersCount(Integer.valueOf(user.get("followers_count").toString()));
+        model.setFriendsCount(Integer.valueOf(user.get("friends_count").toString()));
+        model.setName(user.get("name").toString());
+
+        return model;
     }
 
     @Override
