@@ -51,7 +51,7 @@ public class S3Pipeline implements IKinesisConnectorPipeline<KinesisMessageModel
 
     @Override
     public ITransformer<KinesisMessageModel, byte[]> getTransformer(KinesisConnectorConfiguration configuration) {
-        return new JsonToByteArrayTransformer<KinesisMessageModel>(KinesisMessageModel.class);
+        return new KinesisMessageModelS3Transformer();
     }
 
     @Override
