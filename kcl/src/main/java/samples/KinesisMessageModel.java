@@ -20,7 +20,6 @@ import java.util.Map;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.arnx.jsonic.JSON;
-import net.arnx.jsonic.JSONHint;
 
 /**
  * 
@@ -116,6 +115,7 @@ public class KinesisMessageModel implements Serializable {
         this.name = name;
     }
 
+    @SuppressWarnings("unchecked")
     public static KinesisMessageModel newInstance(String json) {
         KinesisMessageModel model = new KinesisMessageModel();
 
