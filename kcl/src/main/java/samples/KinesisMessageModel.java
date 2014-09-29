@@ -135,9 +135,11 @@ public class KinesisMessageModel implements Serializable {
         model.setSource(tweet.get("source").toString());
         model.setTimestamp(Long.valueOf(tweet.get("timestamp_ms").toString()));
 
-        Map<String, Object> retweet = (Map)tweet.get("retweeted_status");
-        model.setFavoriteCount(Integer.valueOf(retweet.get("favorite_count").toString()));
-        model.setRetweetCount(Integer.valueOf(retweet.get("retweet_count").toString()));
+        if (tweet.get("retweeted_status") instanceof Map) {
+            Map<String, Object> retweet = (Map)tweet.get("retweeted_status");
+            model.setFavoriteCount(Integer.valueOf(retweet.get("favorite_count").toString()));
+            model.setRetweetCount(Integer.valueOf(retweet.get("retweet_count").toString()));
+        }
 
         Map<String, Object> user = (Map)tweet.get("user");
         model.setFollowersCount(Integer.valueOf(user.get("followers_count").toString()));
