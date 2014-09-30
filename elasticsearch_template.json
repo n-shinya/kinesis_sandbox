@@ -1,0 +1,41 @@
+{
+    "template": "*",
+    "mappings": {
+        "KinesisMessageModel": {
+            "dynamic_templates": [
+                {
+                    "string_template" : {
+                        "match" : "*",
+                        "mapping": {
+                            "type": "multi_field",
+                            "fields": {
+                                "{name}": {
+                                    "type": "string",
+                                    "index" : "analyzed",
+                                    "store" : "yes"
+                                },
+                                "{name}.full": {
+                                    "type": "string",
+                                    "index" : "not_analyzed",
+                                    "store" : "yes"
+                                }
+                            }
+                        },
+                        "match_mapping_type" : "string"
+                    }
+                },
+                {
+                    "long_template" : {
+                        "match" : "*",
+                        "mapping": {
+                             "type": "long",
+                             "index" : "not_analyzed",
+                             "store" : "yes"
+                        },
+                        "match_mapping_type" : "long"
+                    }
+                }
+            ]
+        }
+    }
+}
