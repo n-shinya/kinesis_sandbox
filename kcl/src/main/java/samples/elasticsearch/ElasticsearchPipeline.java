@@ -51,7 +51,7 @@ public class ElasticsearchPipeline implements IKinesisConnectorPipeline<KinesisM
 
     @Override
     public IFilter<KinesisMessageModel> getFilter(KinesisConnectorConfiguration configuration) {
-        return new AllPassFilter<KinesisMessageModel>();
+        return new SuspectUserFilter();
     }
 
 }

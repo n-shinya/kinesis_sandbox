@@ -41,6 +41,7 @@ public class KinesisMessageModel implements Serializable {
     protected Integer followersCount;
     protected Integer favoriteCount;
     protected Integer retweetCount;
+    protected String retweetedUser;
     protected String source;
     protected String name;
     protected Long timestamp;
@@ -124,6 +125,14 @@ public class KinesisMessageModel implements Serializable {
         this.timestamp = timestamp;
     }
 
+    public String getRetweetedUser() {
+        return retweetedUser;
+    }
+
+    public void setRetweetedUser(String retweetedUser) {
+        this.retweetedUser = retweetedUser;
+    }
+
     @SuppressWarnings("unchecked")
     public static KinesisMessageModel newInstance(String json) {
         KinesisMessageModel model = new KinesisMessageModel();
@@ -139,6 +148,8 @@ public class KinesisMessageModel implements Serializable {
             Map<String, Object> retweet = (Map)tweet.get("retweeted_status");
             model.setFavoriteCount(Integer.valueOf(retweet.get("favorite_count").toString()));
             model.setRetweetCount(Integer.valueOf(retweet.get("retweet_count").toString()));
+            Map<String, Object> retweetedUser = (Map)retweet.get("user");
+            model.setRetweetedUser(retweetedUser.get("name").toString());
         }
 
         Map<String, Object> user = (Map)tweet.get("user");
