@@ -15,7 +15,7 @@ public class SuspectUserFilter implements IFilter<KinesisMessageModel> {
 
     @Override
     public boolean keepRecord(KinesisMessageModel record) {
-        String retweetedUser = record.getRetweetedUser();
+        String retweetedUser = record.getRetweetedUserScreenName();
         if (retweetedUser == null) {
             return true;
         }

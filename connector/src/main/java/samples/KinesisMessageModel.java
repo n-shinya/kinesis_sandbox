@@ -41,7 +41,8 @@ public class KinesisMessageModel implements Serializable {
     protected Integer followersCount;
     protected Integer favoriteCount;
     protected Integer retweetCount;
-    protected String retweetedUser;
+    protected String retweetedUserName;
+    protected String retweetedUserScreenName;
     protected String source;
     protected String name;
     protected Long timestamp;
@@ -93,6 +94,7 @@ public class KinesisMessageModel implements Serializable {
     public void setFavoriteCount(Integer favoriteCount) {
         this.favoriteCount = favoriteCount;
     }
+
     public Integer getRetweetCount() {
         return retweetCount;
     }
@@ -125,12 +127,20 @@ public class KinesisMessageModel implements Serializable {
         this.timestamp = timestamp;
     }
 
-    public String getRetweetedUser() {
-        return retweetedUser;
+    public String getRetweetedUserName() {
+        return retweetedUserName;
     }
 
-    public void setRetweetedUser(String retweetedUser) {
-        this.retweetedUser = retweetedUser;
+    public void setRetweetedUserName(String retweetedUserName) {
+        this.retweetedUserName = retweetedUserName;
+    }
+
+    public String getRetweetedUserScreenName() {
+        return retweetedUserScreenName;
+    }
+
+    public void setRetweetedUserScreenName(String retweetedUserScreenName) {
+        this.retweetedUserScreenName = retweetedUserScreenName;
     }
 
     @SuppressWarnings("unchecked")
@@ -149,7 +159,8 @@ public class KinesisMessageModel implements Serializable {
             model.setFavoriteCount(Integer.valueOf(retweet.get("favorite_count").toString()));
             model.setRetweetCount(Integer.valueOf(retweet.get("retweet_count").toString()));
             Map<String, Object> retweetedUser = (Map)retweet.get("user");
-            model.setRetweetedUser(retweetedUser.get("name").toString());
+            model.setRetweetedUserName(retweetedUser.get("name").toString());
+            model.setRetweetedUserScreenName(retweetedUser.get("screen_name").toString());
         }
 
         Map<String, Object> user = (Map)tweet.get("user");
